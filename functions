@@ -1,0 +1,69 @@
+# Make directory (or directories) and change the shell working directory
+function mkcd() {
+  mkdir -p "$1" && cd "$1" || return $?
+}
+
+# Go to the first directory where the command executable is foundwhich
+function cdto() {
+  local cmd=${1:?command}
+  local -a paths
+  IFS='' read -r -a paths < <(which "${cmd}" 2> /dev/null)
+  if [[ ${#paths[@]} -gt 0 ]]; then
+    cd "$(dirname "${paths[0]}")" || return 2
+    return 0
+  fi
+  return 1
+}
+
+# Print $PATH in user friendly maner
+function path() {
+  echo "${PATH}" | tr ':' '\n'
+}
+
+# Swap two files
+function swap() {
+  local tmp=tmp.$$
+  mv "$1" $tmp \
+    && mv "$2" "$1" \
+    && mv $tmp "$2"
+}
+
+# Current date/time in different formats
+function now() {
+  case ${1:-d} in
+    z) date '+%Y-%m-%dT%H:%M:%SZ' ;; # 2023-10-13T11:06:50Z
+    d) date '+%Y-%m-%d %H:%M:%S'  ;; # 2023-10-13 11:09:53
+    f) date '+%Y%m%d-%H%M%S'      ;; # 20231013-111012
+    *)
+      # Backup a file?
+      if [[ -f ${1:-} ]]; then
+        cp -v "${1}" "${1}-$(now f)"
+      fi
+      ;;
+  esac
+}
+
+# Rename files matching "*${1}*" to "*${2}*"
+function rename-all() {
+  local match=$1 replace=$2
+  for filename in *"${match}"*; do
+    mv -v "${filename}" "${filename/${match}/${replace}}"
+  done
+}
+
+# Print META-INF/MANIFEST.MF of a jar file
+function jar-info() {
+  local dir
+  for jar in "$@"; do
+    dir=$(mktemp -d)
+    unzip -q "${jar}" -d "${dir}" META-INF/MANIFEST.MF
+    mv "${dir}/META-INF/MANIFEST.MF" "${jar}-info"
+    rm -rf "${dir}"
+  done
+}
+
+function git-checkout() {
+  local branch=${1:?branch}
+
+  git checkout -b "${branch}" --track origin/"${branch}"
+}
