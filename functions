@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Make directory (or directories) and change the shell working directory
 function mkcd() {
   mkdir -p "$1" && cd "$1" || return $?
@@ -21,7 +23,7 @@ function path() {
 }
 
 # Swap two files
-function swap() {
+function swap-files() {
   local tmp=tmp.$$
   mv "$1" $tmp \
     && mv "$2" "$1" \
