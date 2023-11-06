@@ -28,9 +28,9 @@ alias g2-clear='rm -r ~/.gradle/caches/'
 
 # Docker
 alias d='docker'
-alias d-run='docker run -it --rm'
-alias d-bash='docker run -it --rm --entrypoint //bin/bash'
 alias d-exec='docker exec -it'
+alias d-run='docker run -it --rm'
+alias d-sh='docker run -it --rm --entrypoint //bin/sh'
 alias d-images='docker images --format="{{.Repository}}:{{.Tag}} {{.Size}} ({{.ID}})" | sort'
 alias d-stats='(docker ps -q | xargs docker stats --no-stream)'
 alias d-stop='docker container stop "$(docker container ls -q)"'
