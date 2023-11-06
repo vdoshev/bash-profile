@@ -11,8 +11,6 @@ alias trim-nl='tr -d '\''\n'\'''
 alias trim-comments='sed '\''/^#.*$/d'\'''
 alias trim-empty='sed '\''/^$/d'\'''
 
-alias jar-info-all='jar-info *.jar'
-
 # Git
 alias gs='git status'
 alias git-url='cat .git/config | grep url | sed "s/.*url = //"'
