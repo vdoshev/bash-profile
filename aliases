@@ -20,3 +20,13 @@ alias git-amend='git add . && git commit --amend && git push -f'
 
 alias code.='code'
 alias code-bash='code ~/.bash'
+
+alias d='docker'
+alias d-run='docker run -it --rm'
+alias d-bash='docker run -it --rm --entrypoint //bin/bash'
+alias d-exec='docker exec -it'
+alias d-images='docker images --format="{{.Repository}}:{{.Tag}} {{.Size}} ({{.ID}})" | sort'
+alias d-stats='(docker ps -q | xargs docker stats --no-stream)'
+alias d-stop='docker container stop "$(docker container ls -q)"'
+alias d-prune='(docker system prune -f; docker volume prune -f)'
+alias compose='docker compose'
