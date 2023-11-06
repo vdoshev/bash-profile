@@ -13,14 +13,20 @@ alias trim-empty='sed '\''/^$/d'\'''
 
 alias jar-info-all='jar-info *.jar'
 
+# Git
 alias gs='git status'
 alias git-url='cat .git/config | grep url | sed "s/.*url = //"'
 alias git-commit='git commit -m "Message $(head -1 <(fold -w 20  <(tr -dc "a-zA-Z0-9" < /dev/urandom)))"'
 alias git-amend='git add . && git commit --amend && git push -f'
 
-alias code.='code'
-alias code-bash='code ~/.bash'
+# Gradle
+alias g='./gradlew'
+alias g-build='g clean build -x test'
+alias g-tree='(g dependencies | tee .tree)'
+alias g2='cd ~/.gradle/caches/modules-2/files-2.1'
+alias g2-clear='rm -r ~/.gradle/caches/'
 
+# Docker
 alias d='docker'
 alias d-run='docker run -it --rm'
 alias d-bash='docker run -it --rm --entrypoint //bin/bash'
@@ -30,3 +36,7 @@ alias d-stats='(docker ps -q | xargs docker stats --no-stream)'
 alias d-stop='docker container stop "$(docker container ls -q)"'
 alias d-prune='(docker system prune -f; docker volume prune -f)'
 alias compose='docker compose'
+
+alias code.='code'
+# shellcheck disable=SC2139
+alias code-bash='code '"$(dirname "${BASH_SOURCE[0]}")"
