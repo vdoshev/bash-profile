@@ -25,6 +25,17 @@ if command -v git &> /dev/null; then
   alias git-amend='git add . && git commit --amend && git push -f'
 fi
 
+# Maven
+if command -v mvn &> /dev/null; then
+  alias mvn-tree='mvn -Dstyle.color=never dependency:tree | tee .tree'
+  alias mvn-install='mvn clean install -DskipTests=true'
+  alias mvn-settings='mvn help:effective-settings'
+  alias mvn-sources='mvn dependency:resolve -Dclassifier=sources'
+  alias mvn-javadoc='mvn dependency:resolve -Dclassifier=javadoc'
+  alias m2='cd ~/.m2/repository'
+  alias m2-clear='find ~/.m2/repository -name '\''*.lastUpdated'\'' -delete'
+fi
+
 # Gradle
 if command -v gradle &> /dev/null; then
   alias g='./gradlew'
@@ -45,6 +56,12 @@ if command -v docker &> /dev/null; then
   alias d-stop='docker container stop "$(docker container ls -q)"'
   alias d-prune='(docker system prune -f; docker volume prune -f)'
   alias compose='docker compose'
+fi
+
+# Kubernetes
+if command -v kubectl &> /dev/null; then
+  alias k='kubectl'
+  alias k-exec='kubectl exec -i -t'
 fi
 
 # VSCode
