@@ -13,5 +13,36 @@ from the first one that exists and is readable.
 Append your startup file with:
 
 ```bash
-source ${THIS_REPO}/profile
+source .../profile
+```
+
+**(!)** Replace "..." with the local path where this repo is cloned.
+
+### Bash On Windows
+
+You can specify your terminal emulator type:
+
+- [MinGW (Git Bash)](https://git-scm.com)
+
+    ```bash
+    source .../profile windows/mingw
+    ```
+
+- [MobaXterm](https://mobaxterm.mobatek.net)
+
+    ```bash
+    source .../profile windows/mobaxterm
+    ```
+
+- [Ubuntu on WSL](https://ubuntu.com/wsl)
+
+    ```bash
+    source .../profile wsl/ubuntu
+    ```
+
+Or, you can specify the path through which Windows computer drives are accessible:
+
+```bash
+DRIVES_PATH=/
+source .../profile
 ```

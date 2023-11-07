@@ -1,13 +1,27 @@
 #!/usr/bin/env bash
-###########################################################
-# Read the definitions of aliases and functions.
-############################################################
-function bash-profile() {
-  local dir
-  dir=$(dirname "${BASH_SOURCE[0]}")
-  source "${dir}/aliases"
-  source "${dir}/functions"
-}
+# shellcheck disable=SC2034
 
-echo "${BASH_SOURCE[0]}"
-bash-profile
+echo "${BASH_SOURCE[0]} $*"
+
+BASH_PROFILE_DIR=$(dirname "${BASH_SOURCE[0]}")
+BASH_PROFILE=${1:-default}
+
+case "${BASH_PROFILE}" in
+  windows/mingw|mingw)
+    DRIVES_PATH=/
+    ;;
+  windows/mobaxterm|mobaxterm)
+    DRIVES_PATH=/drives
+    ;;
+  wsl/ubuntu)
+    DRIVES_PATH=/mnt
+    ;;
+  default)
+    ;;
+  *)
+    echo "Unsupported profile: '${BASH_PROFILE}'" >&2
+    return 1
+esac
+
+source "${BASH_PROFILE_DIR}/aliases"
+source "${BASH_PROFILE_DIR}/functions"

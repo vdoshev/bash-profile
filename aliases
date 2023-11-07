@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2139
+
+alias cd-bash='cd '"${BASH_PROFILE_DIR}"
 
 alias l='ls -lha'
 alias env='env | sort'
@@ -10,6 +13,9 @@ alias trim-space='sed -e '\''s/^[ \t]*//; s/[ \t]*$//;'\'''
 alias trim-nl='tr -d '\''\n'\'''
 alias trim-comments='sed '\''/^#.*$/d'\'''
 alias trim-empty='sed '\''/^$/d'\'''
+
+# Print ${PATH} in user friendly maner
+alias PATH='(echo "${PATH}" | tr ":" "\n")'
 
 # Git
 if command -v git &> /dev/null; then
@@ -44,6 +50,5 @@ fi
 # VSCode
 if command -v code &> /dev/null; then
   alias code.='code'
-  # shellcheck disable=SC2139
-  alias code-bash='code '"$(dirname "${BASH_SOURCE[0]}")"
+  alias code-bash='code '"${BASH_PROFILE_DIR}"
 fi

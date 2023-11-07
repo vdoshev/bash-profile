@@ -1,5 +1,27 @@
 #!/usr/bin/env bash
 
+if [[ -n ${DRIVES_PATH} ]]; then
+  # Convert *nix path to Windows path, e.g. /c/foo -> C:/foo
+  function winpath() {
+    local nix_path=$1
+    local sed_script="s|^${DRIVES_PATH/%\//}/\([a-zA-Z]\)/|\1:/|"
+    local ret
+    ret=$(echo "${nix_path}" | sed -e "${sed_script}")
+    if [[ ${ret:1:1} = ':' ]]; then
+      echo "${ret^}"
+    else
+      echo "${ret}"
+    fi
+  }
+
+  # Convert Windows path to *nix path, e.g. C:/foo -> /c/foo
+  function nixpath() {
+    local win_path=$1
+    local sed_script="s|\\\\|/|g; s|^\([a-zA-Z]\):|${DRIVES_PATH/%\//}/\1|"
+    echo "${win_path,}" | sed -e "${sed_script}"
+  }
+fi
+
 # Make directory (or directories) and change the shell working directory
 function mkcd() {
   mkdir -p "$1" && cd "$1" || return $?
