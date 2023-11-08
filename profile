@@ -4,7 +4,7 @@
 echo "${BASH_SOURCE[0]} $*"
 
 BASH_PROFILE_DIR=$(dirname "${BASH_SOURCE[0]}")
-BASH_PROFILE=${1:-default}
+BASH_PROFILE=${1:-${BASH_PROFILE:-default}}
 
 case "${BASH_PROFILE}" in
   windows/mingw|mingw)

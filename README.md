@@ -13,36 +13,53 @@ from the first one that exists and is readable.
 Append your startup file with:
 
 ```bash
-source .../profile
+source ~/bash-profile/profile
 ```
 
-**(!)** Replace "..." with the local path where this repo is cloned.
+Replace "~/bash-profile" with the location where you have cloned this repo.
 
 ### Bash On Windows
 
-You can specify your terminal emulator type:
+Windows computer drives are accessible through a path which location varies depending on the terminal emulator.  
+Use any of the defined profiles bellow, or specify custom location from environment variable DRIVES_PATH:
 
-- [MinGW (Git Bash)](https://git-scm.com)
+| TERMINAL EMULATOR                          | DRIVES_PATH | BASH_PROFILE      | C:        |
+|--------------------------------------------|-------------|-------------------|-----------|
+| [MinGw (Git Bash)](https://git-scm.com)    | /           | windows/mingw     | /c        |
+| [MobaXterm](https://mobaxterm.mobatek.net) | /drives     | windows/mobaxterm | /drives/c |
+| [Ubuntu on WSL](https://ubuntu.com/wsl)    | /mnt        | wsl/ubuntu        | /mnt/c    |
+| Linux (native)                             |             | default           |           |
 
-    ```bash
-    source .../profile windows/mingw
-    ```
+In case you don't intent to deal with paths to Windows programs, then use the default profile and skip this section.
 
-- [MobaXterm](https://mobaxterm.mobatek.net)
+**Examples:**
 
-    ```bash
-    source .../profile windows/mobaxterm
-    ```
+```bash
+source ~/.bash-profile/profile windows/mingw
+```
 
-- [Ubuntu on WSL](https://ubuntu.com/wsl)
-
-    ```bash
-    source .../profile wsl/ubuntu
-    ```
-
-Or, you can specify the path through which Windows computer drives are accessible:
+```bash
+BASH_PROFILE=windows/mingw
+source ~/.bash-profile/profile
+```
 
 ```bash
 DRIVES_PATH=/
-source .../profile
+source ~/bash-profile/profile
 ```
+
+The following helper functions are available on Windows:
+
+- `winpath()` - converts *nix path to Windows path
+
+    ```bash
+    winpath ~       # -> C:/Users/vdoshev
+    winpath /c/foo  # -> C:/foo
+    ```
+
+- `nixpath()` - converts Windows path to *nix path
+
+    ```bash
+    nixpath ~       # -> /c/Users/vdoshev
+    nixpath C:/foo  # -> /c/foo
+    ```
