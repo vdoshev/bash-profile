@@ -35,12 +35,12 @@ In case you don't intent to deal with paths to Windows programs, then use the de
 **Examples:**
 
 ```bash
-source ~/.bash-profile/profile windows/mingw
+source ~/bash-profile/profile windows/mingw
 ```
 
 ```bash
 BASH_PROFILE=windows/mingw
-source ~/.bash-profile/profile
+source ~/bash-profile/profile
 ```
 
 ```bash

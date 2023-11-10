@@ -20,7 +20,6 @@ alias PATH='(echo "${PATH}" | tr ":" "\n")'
 # Git
 if command -v git &> /dev/null; then
   alias gs='git status'
-  alias git-url='cat .git/config | grep url | sed "s/.*url = //"'
   alias git-commit='git commit -m "Message $(head -1 <(fold -w 20  <(tr -dc "a-zA-Z0-9" < /dev/urandom)))"'
   alias git-amend='git add . && git commit --amend && git push -f'
 fi
