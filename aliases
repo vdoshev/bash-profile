@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2139
 
-alias cd-bash='cd '"${BASH_PROFILE_DIR}"
+# Print ${PATH} in user friendly maner
+alias PATH='(echo "${PATH}" | tr ":" "\n")'
 
 alias l='ls -lha'
 alias env='env | sort'
@@ -14,8 +15,10 @@ alias trim-nl='tr -d '\''\n'\'''
 alias trim-comments='sed '\''/^#.*$/d'\'''
 alias trim-empty='sed '\''/^$/d'\'''
 
-# Print ${PATH} in user friendly maner
-alias PATH='(echo "${PATH}" | tr ":" "\n")'
+alias cd-bash='cd '"${BASH_PROFILE_DIR}"
+
+alias encode-secret="${BASH_PROFILE_DIR}"'/feature/secret.sh'
+alias decode-secret="${BASH_PROFILE_DIR}"'/feature/secret.sh -d'
 
 # Git
 if command -v git &> /dev/null; then
