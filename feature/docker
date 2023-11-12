@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+alias d='docker'
+alias d-exec='docker exec -it'
+alias d-run='docker run -it --rm'
+alias d-sh='docker run -it --rm --entrypoint //bin/sh'
+alias d-images='docker images --format="{{.Repository}}:{{.Tag}} {{.Size}} ({{.ID}})" | sort'
+alias d-stats='(docker ps -q | xargs docker stats --no-stream)'
+alias d-stop='docker container stop "$(docker container ls -q)"'
+alias d-prune='(docker system prune -f; docker volume prune -f)'
+alias compose='docker compose'
+
+function docker-image-file() {
+  local image=${1}    # registry/repository/image:tag@sha256:1234
+  image=${image%@*}   # registry/repository/image:tag
+  image=${image##*/}  # image:tag
+  image=${image//:/_} # image_tag
+  echo "${image}"
+}
+
+function docker-save() {
+  local image=${1:?"Docker image"}
+  docker save "${image}" | gzip -9 > "$(docker-image-file "${image}").tar.gz"
+}
+
+function docker-load() {
+  docker load < "$1"
+}

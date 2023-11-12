@@ -17,57 +17,5 @@ alias trim-empty='sed '\''/^$/d'\'''
 
 alias cd-bash='cd '"${BASH_PROFILE_DIR}"
 
-alias encode-secret="${BASH_PROFILE_DIR}"'/feature/secret.sh'
-alias decode-secret="${BASH_PROFILE_DIR}"'/feature/secret.sh -d'
-
-# Git
-if command -v git &> /dev/null; then
-  alias gs='git status'
-  alias git-commit='git commit -m "Message $(head -1 <(fold -w 20  <(tr -dc "a-zA-Z0-9" < /dev/urandom)))"'
-  alias git-amend='git add . && git commit --amend && git push -f'
-fi
-
-# Maven
-if command -v mvn &> /dev/null; then
-  alias mvn-tree='mvn -Dstyle.color=never dependency:tree | tee .tree'
-  alias mvn-install='mvn clean install -DskipTests=true'
-  alias mvn-settings='mvn help:effective-settings'
-  alias mvn-sources='mvn dependency:resolve -Dclassifier=sources'
-  alias mvn-javadoc='mvn dependency:resolve -Dclassifier=javadoc'
-  alias m2='cd ~/.m2/repository'
-  alias m2-clear='find ~/.m2/repository -name '\''*.lastUpdated'\'' -delete'
-fi
-
-# Gradle
-if command -v gradle &> /dev/null; then
-  alias g='./gradlew'
-  alias g-build='g clean build -x test'
-  alias g-tree='(g dependencies | tee .tree)'
-  alias g2='cd ~/.gradle/caches/modules-2/files-2.1'
-  alias g2-clear='rm -r ~/.gradle/caches/'
-fi
-
-# Docker
-if command -v docker &> /dev/null; then
-  alias d='docker'
-  alias d-exec='docker exec -it'
-  alias d-run='docker run -it --rm'
-  alias d-sh='docker run -it --rm --entrypoint //bin/sh'
-  alias d-images='docker images --format="{{.Repository}}:{{.Tag}} {{.Size}} ({{.ID}})" | sort'
-  alias d-stats='(docker ps -q | xargs docker stats --no-stream)'
-  alias d-stop='docker container stop "$(docker container ls -q)"'
-  alias d-prune='(docker system prune -f; docker volume prune -f)'
-  alias compose='docker compose'
-fi
-
-# Kubernetes
-if command -v kubectl &> /dev/null; then
-  alias k='kubectl'
-  alias k-exec='kubectl exec -i -t'
-fi
-
-# VSCode
-if command -v code &> /dev/null; then
-  alias code.='code'
-  alias code-bash='code '"${BASH_PROFILE_DIR}"
-fi
+alias encode-secret="${BASH_PROFILE_DIR}"'/sh/secret.sh'
+alias decode-secret="${BASH_PROFILE_DIR}"'/sh/secret.sh -d'

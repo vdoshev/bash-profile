@@ -80,31 +80,3 @@ function jar-info() {
     rm -rf "${dir}"
   done
 }
-
-function git-checkout() {
-  local branch=${1:?remote branch}
-  local remote=${2:-origin}
-  git checkout -b "${branch}" --track "${remote}/${branch}"
-}
-
-function git-pull() {
-  local projects=("$@") project git_dir remote
-
-  if [ $# = 0 ]; then
-    projects=(.)
-  fi
-
-  for project in "${projects[@]}"; do
-    find "${project}" -type d -name '.git' | while read -r git_dir; do
-      (
-        if cd "${git_dir}/.."; then
-          git remote | while IFS= read -r remote; do
-            echo ""
-            echo "Pulling from $(git remote get-url "${remote}") (${remote}) to $(pwd)"
-            git pull --tags --force "${remote}"
-          done
-        fi
-      )
-    done
-  done
-}

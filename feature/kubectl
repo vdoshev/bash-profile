@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+alias k='kubectl'
+alias k-exec='kubectl exec -i -t'

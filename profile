@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2034
 
 echo "${BASH_SOURCE[0]} $*"
 
@@ -25,3 +24,11 @@ esac
 
 source "${BASH_PROFILE_DIR}/aliases"
 source "${BASH_PROFILE_DIR}/functions"
+
+# Add features only for the available commands.
+for feature in "${BASH_PROFILE_DIR}"/feature/*; do
+  if command -v "$(basename "${feature}")" &> /dev/null; then
+    # shellcheck source=/dev/null
+    source "${feature}"
+  fi
+done

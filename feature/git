@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+alias gs='git status'
+alias git-commit='git commit -m "Message $(head -1 <(fold -w 20  <(tr -dc "a-zA-Z0-9" < /dev/urandom)))"'
+alias git-amend='git add . && git commit --amend && git push -f'
+
+# Pull from multiple git remote repositories (can also be nested).
+function git-pull() {
+  local projects=("$@") project git_dir remote
+
+  if [ $# = 0 ]; then
+    projects=(.)
+  fi
+
+  for project in "${projects[@]}"; do
+    find "${project}" -type d -name '.git' | while read -r git_dir; do
+      (
+        if cd "${git_dir}/.."; then
+          git remote | while IFS= read -r remote; do
+            echo ""
+            echo "Pulling from $(git remote get-url "${remote}") (${remote}) to $(pwd)"
+            git pull --tags --force "${remote}"
+          done
+        fi
+      )
+    done
+  done
+}

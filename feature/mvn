@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+alias mvn-tree='mvn -Dstyle.color=never dependency:tree | tee .tree'
+alias mvn-install='mvn clean install -DskipTests=true'
+alias mvn-settings='mvn help:effective-settings'
+alias mvn-sources='mvn dependency:resolve -Dclassifier=sources'
+alias mvn-javadoc='mvn dependency:resolve -Dclassifier=javadoc'
+alias m2='cd ~/.m2/repository'
+alias m2-clear='find ~/.m2/repository -name '\''*.lastUpdated'\'' -delete'

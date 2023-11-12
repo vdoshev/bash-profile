@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2139
+alias code.='code'
+alias code-bash='code '"${BASH_PROFILE_DIR}"

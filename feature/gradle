@@ -1,0 +1,6 @@
+#!/bin/sh
+alias g='./gradlew'
+alias g-build='g clean build -x test'
+alias g-tree='(g dependencies | tee .tree)'
+alias g2='cd ~/.gradle/caches/modules-2/files-2.1'
+alias g2-clear='rm -r ~/.gradle/caches/'
