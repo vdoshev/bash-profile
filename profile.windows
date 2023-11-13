@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2034
+
+# In Windows the %UserProfile% variable is a special system-wide environment variable.
+# It contains %SystemDrive%\Users\{username}.
+USER_HOME=$(echo "${USERPROFILE,}" | sed -e "s|\\\\|/|g; s|^\([a-zA-Z]\):|${DRIVES_PATH/%\//}/\1|")
