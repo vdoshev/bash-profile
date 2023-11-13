@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 __start_time=$(date +%s%N)
 
-echo "${BASH_SOURCE[0]} $*"
-
 BASH_PROFILE_DIR=$(dirname "${BASH_SOURCE[0]}")
 BASH_PROFILE=${1:-${BASH_PROFILE:-default}}
 
@@ -22,6 +20,8 @@ case "${BASH_PROFILE}" in
     echo "Unsupported profile: '${BASH_PROFILE}'" >&2
     return 1
 esac
+
+echo -n "${BASH_SOURCE[0]} ${BASH_PROFILE}"
 
 source "${BASH_PROFILE_DIR}/functions"
 source "${BASH_PROFILE_DIR}/aliases"
