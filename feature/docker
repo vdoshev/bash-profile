@@ -3,10 +3,11 @@ alias d='docker'
 alias d-exec='docker exec -it'
 alias d-run='docker run -it --rm'
 alias d-sh='docker run -it --rm --entrypoint //bin/sh'
-alias d-images='docker images --format="{{.Repository}}:{{.Tag}} {{.Size}} ({{.ID}})" | sort'
-alias d-stats='(docker ps -q | xargs docker stats --no-stream)'
-alias d-stop='docker container stop "$(docker container ls -q)"'
+alias d-images='\docker images --format="{{.Repository}}:{{.Tag}} {{.Size}} ({{.ID}})" | sort'
+alias d-stats='(\docker ps -q | xargs \docker stats --no-stream)'
+alias d-stop='\docker container stop "$(docker container ls -q)"'
 alias d-prune='(docker system prune -f; docker volume prune -f)'
+alias d-ls=d-images
 alias compose='docker compose'
 
 function docker-image-file() {
