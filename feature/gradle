@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 alias g='./gradlew'
 alias g-build='g clean build -x test'
 alias g-tree='(g dependencies | tee .tree)'
