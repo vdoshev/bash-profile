@@ -8,6 +8,9 @@ alias l='ls -lha'
 alias env='env | sort'
 alias cls=clear
 
+# Find all declared variables with names starting with ...
+alias declared='declare -p | grep '
+
 # Find all files except the contents of system folders
 alias find-f='find . -type f -not -path "./.*/*" | sort'
 
