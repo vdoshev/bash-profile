@@ -6,6 +6,8 @@ BASH_PROFILE_DIR=$(dirname "${BASH_SOURCE[0]}")
 
 cd "${BASH_PROFILE_DIR}" || return 1
 
+USER_HOME=~
+
 case "${BASH_PROFILE}" in
   windows/mingw|mingw)
     DRIVES_PATH=/
