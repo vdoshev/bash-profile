@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 __start_time=$(date +%s%N)
 
-BASH_PROFILE_DIR=$(dirname "${BASH_SOURCE[0]}")
 BASH_PROFILE=${1:-${BASH_PROFILE:-default}}
+BASH_PROFILE_DIR=$(dirname "${BASH_SOURCE[0]}")
 
 cd "${BASH_PROFILE_DIR}" || return 1
 
@@ -19,11 +19,10 @@ case "${BASH_PROFILE}" in
     DRIVES_PATH=/mnt
     source profile.wsl
     ;;
-  default)
+  default|'')
     ;;
   *)
     echo "Unsupported profile: '${BASH_PROFILE}'" >&2
-    return 2
 esac
 
 echo -n "${BASH_SOURCE[0]} ${BASH_PROFILE}"
@@ -42,11 +41,13 @@ for feature in "$@"; do
   # Add features only for the available commands.
   if command -v "${feature}" &> /dev/null; then
     # shellcheck source=/dev/null
-    if source feature/"${feature}"; then
+    if source "feature/${feature}"; then
       BASH_PROFILE_FEATURES+=("${feature}")
     fi
   fi
 done
+
+cd ~ || return 2
 
 __end_time=$(date +%s%N)
 echo " ${BASH_PROFILE_FEATURES[*]} ($(( (__end_time - __start_time) / 1000000 )) ms)"

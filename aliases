@@ -7,7 +7,9 @@ alias PATH='(echo "${PATH}" | tr ":" "\n")'
 alias l='ls -lha'
 alias env='env | sort'
 alias cls=clear
-alias find-all='find | grep -v -e ^\./\.git'
+
+# Find all files except the contents of the .git folder
+alias find-f='find . -type f | grep -v -e ^\./\.git | sort'
 
 # Trim spaces, new lines, comments, empty lines, etc.
 alias trim-space='sed -e '\''s/^[ \t]*//; s/[ \t]*$//;'\'''
