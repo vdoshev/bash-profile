@@ -9,7 +9,7 @@ alias env='env | sort'
 alias cls=clear
 
 # Find all files except the contents of the .git folder
-alias find-f='find . -type f | grep -v -e ^\./\.git | sort'
+alias find-f='find . -type f -not -path "./.git/*"'
 
 # Trim spaces, new lines, comments, empty lines, etc.
 alias trim-space='sed -e '\''s/^[ \t]*//; s/[ \t]*$//;'\'''
