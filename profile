@@ -25,6 +25,7 @@ case "${BASH_PROFILE}" in
     ;;
   *)
     echo "Unsupported profile: '${BASH_PROFILE}'" >&2
+    ;;
 esac
 
 echo -n "${BASH_SOURCE[0]} ${BASH_PROFILE}"
