@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2139
+# shellcheck disable=SC2139 # expands when defined, not when used
 
 alias g2='cd '"${USER_HOME}"'/.gradle/caches/modules-2/files-2.1'
 alias g2-clear='rm -r '"${USER_HOME}"'/.gradle/caches/'

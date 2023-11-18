@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2139
+# shellcheck disable=SC2139 # expands when defined, not when used
 
 alias m2='cd '"${USER_HOME}"'/.m2/repository'
 alias m2-clear='find '"${USER_HOME}"'/.m2/repository -name '\''*.lastUpdated'\'' -delete'

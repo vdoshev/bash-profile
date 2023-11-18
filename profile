@@ -6,22 +6,19 @@ BASH_PROFILE_DIR=$(dirname "${BASH_SOURCE[0]}")
 
 cd "${BASH_PROFILE_DIR}" || return 1
 
-USER_HOME=~
-
 case "${BASH_PROFILE}" in
   windows/mingw|mingw)
-    DRIVES_PATH=/
-    source profile.windows
+    source profile.windows /
     ;;
   windows/mobaxterm|mobaxterm)
-    DRIVES_PATH=/drives
-    source profile.windows
+    source profile.windows /drives
     ;;
   wsl/ubuntu)
-    DRIVES_PATH=/mnt
-    source profile.wsl
+    source profile.wsl /mnt
     ;;
   default|'')
+    # shellcheck disable=SC2034 # appears unused
+    USER_HOME=~
     ;;
   *)
     echo "Unsupported profile: '${BASH_PROFILE}'" >&2
@@ -34,9 +31,10 @@ source functions
 source aliases
 
 shift
-# shellcheck disable=SC2086,SC2048
+# shellcheck disable=SC2086 # quote to prevent globbing and word splitting
+# shellcheck disable=SC2048 # use "$@" (with quotes) to prevent whitespace problems
 test $# -ne 0 || set -- ${BASH_PROFILE_FEATURES[*]}
-# shellcheck disable=SC2046
+# shellcheck disable=SC2046 # quote to prevent word splitting
 test $# -ne 0 || set -- $(find feature -type f -printf "%f ")
 
 BASH_PROFILE_FEATURES=()

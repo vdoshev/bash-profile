@@ -13,7 +13,7 @@ function read_passphrase() {
   local prompt=${2:-"Enter passphrase"}
   echo -n "${prompt}: " >&2
   stty -echo
-  # shellcheck disable=SC2034
+  # shellcheck disable=SC2034 # appears unused
   IFS= read -r var_name
   stty echo
   echo "" >&2

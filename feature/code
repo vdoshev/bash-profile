@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2139
+# shellcheck disable=SC2139 # expands when defined, not when used
+
 alias c.='code .'
 alias code.='code .'
 alias code-bash='code '"${BASH_PROFILE_DIR}"

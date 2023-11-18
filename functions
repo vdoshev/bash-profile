@@ -1,7 +1,17 @@
 #!/usr/bin/env bash
 
-if [[ -n ${DRIVES_PATH} ]]; then
-  # Convert *nix path to Windows path, e.g. /c/foo -> C:/foo
+if command -v cygpath &> /dev/null; then
+  # Convert Unix format paths to Windows path, with regular slashes.
+  function winpath() {
+    cygpath "${1}" --absolute --mixed
+  }
+
+  # Convert Windows format paths (with any type of slashes) to Unix path.
+  function nixpath() {
+    cygpath "${1}" --absolute --unix   
+  }
+elif [[ -n ${DRIVES_PATH} ]]; then
+  # Convert Unix format paths to Windows path, with regular slashes.
   function winpath() {
     local nix_path=$1
     local sed_script="s|^${DRIVES_PATH/%\//}/\([a-zA-Z]\)/|\1:/|"
@@ -14,7 +24,7 @@ if [[ -n ${DRIVES_PATH} ]]; then
     fi
   }
 
-  # Convert Windows path to *nix path, e.g. C:/foo -> /c/foo
+  # Convert Windows format paths (with any type of slashes) to Unix path.
   function nixpath() {
     local win_path=$1
     local sed_script="s|\\\\|/|g; s|^\([a-zA-Z]\):|${DRIVES_PATH/%\//}/\1|"
@@ -47,18 +57,18 @@ function swap-files() {
     && mv $tmp "$2"
 }
 
+# Make a backup copy of a file
+function backup-file() {
+  cp -v "${1}" "${1}-$(now f)"
+}
+
 # Current date/time in different formats
 function now() {
   case ${1:-d} in
     z) date '+%Y-%m-%dT%H:%M:%SZ' ;; # 2023-10-13T11:06:50Z
     d) date '+%Y-%m-%d %H:%M:%S'  ;; # 2023-10-13 11:09:53
     f) date '+%Y%m%d-%H%M%S'      ;; # 20231013-111012
-    *)
-      # Backup a file?
-      if [[ -f ${1:-} ]]; then
-        cp -v "${1}" "${1}-$(now f)"
-      fi
-      ;;
+    *) backup-file "${1}"         ;;
   esac
 }
 

@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
 
+# Windows computer drives are accessible through a path which location varies depending on the terminal emulator.  
+DRIVES_PATH=${1}
+
 # In Windows the %UserProfile% variable is a special system-wide environment variable.
 # It contains %SystemDrive%\Users\{username}.
 USER_HOME=$(echo "${USERPROFILE,}" | sed -e "s|\\\\|/|g; s|^\([a-zA-Z]\):|${DRIVES_PATH/%\//}/\1|")

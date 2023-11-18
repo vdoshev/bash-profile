@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
 
+# Windows computer drives are accessible through a path which location varies depending on the WSL distribution.  
+DRIVES_PATH=${1}
+
 USER_HOME=~
