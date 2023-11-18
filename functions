@@ -50,7 +50,7 @@ function cdto() {
 }
 
 # Swap two files
-function swap-files() {
+function swap_files() {
   local tmp=tmp.$$
   mv "$1" $tmp \
     && mv "$2" "$1" \
@@ -58,7 +58,7 @@ function swap-files() {
 }
 
 # Make a backup copy of a file
-function backup-file() {
+function backup_file() {
   cp -v "${1}" "${1}-$(now f)"
 }
 
@@ -68,12 +68,12 @@ function now() {
     z) date '+%Y-%m-%dT%H:%M:%SZ' ;; # 2023-10-13T11:06:50Z
     d) date '+%Y-%m-%d %H:%M:%S'  ;; # 2023-10-13 11:09:53
     f) date '+%Y%m%d-%H%M%S'      ;; # 20231013-111012
-    *) backup-file "${1}"         ;;
+    *) backup_file "${1}"         ;;
   esac
 }
 
 # Rename files matching "*${1}*" to "*${2}*"
-function rename-all() {
+function rename_all() {
   local match=$1 replace=$2
   for filename in *"${match}"*; do
     mv -v "${filename}" "${filename/${match}/${replace}}"
@@ -81,7 +81,7 @@ function rename-all() {
 }
 
 # Print META-INF/MANIFEST.MF of a jar file
-function jar-info() {
+function jar_info() {
   local dir
   for jar in "$@"; do
     dir=$(mktemp -d)

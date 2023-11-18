@@ -10,7 +10,7 @@ alias d-prune='(docker system prune -f; docker volume prune -f)'
 alias d-ls=d-images
 alias compose='docker compose'
 
-function docker-image-file() {
+function docker_image_file() {
   local image=${1}    # registry/repository/image:tag@sha256:1234
   image=${image%@*}   # registry/repository/image:tag
   image=${image##*/}  # image:tag
@@ -18,11 +18,11 @@ function docker-image-file() {
   echo "${image}"
 }
 
-function docker-save() {
+function docker_save() {
   local image=${1:?"Docker image"}
-  docker save "${image}" | gzip -9 > "$(docker-image-file "${image}").tar.gz"
+  docker save "${image}" | gzip -9 > "$(docker_image_file "${image}").tar.gz"
 }
 
-function docker-load() {
+function docker_load() {
   docker load < "$1"
 }
