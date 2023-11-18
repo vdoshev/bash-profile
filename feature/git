@@ -8,9 +8,7 @@ alias git-pull=git_pull
 function git_pull() {
   local dir git_dir remote
 
-  [[ $# -gt 0 ]] || set -- .
-
-  for dir in "$@"; do
+  for dir in "${@:-.}"; do
     find "${dir}" -type d -name '.git' | while read -r git_dir; do
       (
         if cd "${git_dir}/.."; then
