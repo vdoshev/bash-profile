@@ -27,8 +27,7 @@ esac
 
 echo -n "${BASH_SOURCE[0]} ${BASH_PROFILE}"
 
-source functions
-source aliases
+source common
 
 shift
 # shellcheck disable=SC2086 # quote to prevent globbing and word splitting
