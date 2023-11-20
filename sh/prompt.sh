@@ -22,7 +22,7 @@ function emit_prompt() {
 
   case ${1:-} in
     1|color*)
-      echo "${purple}${time} ${red}${user}${white}@${blue}${host}${white}:${green}${pwd}${white}${uid}${reset} "
+      echo "${purple}${time}${reset} ${green}${user}@${host}${reset}:${blue}${pwd}${reset}${uid} "
       ;;
     *)
       echo "${time} ${user}@${host}:${pwd}${uid} "
