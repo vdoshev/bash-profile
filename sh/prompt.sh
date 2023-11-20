@@ -1,36 +1,32 @@
 #!/usr/bin/env bash
+# https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Controlling-the-Prompt
 
-# set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
-esac
+# Emit prompt char sequence for PS1 variable
+# shellcheck disable=SC2034
+function emit_prompt() {
+  # Colors
+  local    red='\[\033[0;31m\]'
+  local  green='\[\033[0;32m\]'
+  local yellow='\[\033[0;33m\]'
+  local   blue='\[\033[0;34m\]'
+  local purple='\[\033[0;35m\]'
+  local   cyan='\[\033[0;36m\]'
+  local  white='\[\033[0;37m\]'
+  local  reset='\[\033[0m\]'
+  # Special characters
+  local time='\t' # The time, in 24-hour HH:MM:SS format
+  local user='\u' # The username of the current user
+  local host='\h' # The hostname, up to the first ‘.’
+  local  pwd='\w' # The value of the PWD shell variable
+  local  uid='\$' # For root user is '#', and '$' otherwise
 
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-#force_color_prompt=yes
+  case ${1:-} in
+    1|color*)
+      echo "${purple}${time} ${red}${user}${white}@${blue}${host}${white}:${green}${pwd}${white}${uid}${reset} "
+      ;;
+    *)
+      echo "${time} ${user}@${host}:${pwd}${uid} "
+  esac
+}
 
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-        # We have color support; assume it's compliant with Ecma-48
-        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-        # a case would tend to support setf rather than setaf.)
-        color_prompt=yes
-    else
-        color_prompt=
-    fi
-fi
-
-if [ "$color_prompt" = yes ]; then
-     RESET='\[\033[0m\]'
-    YELLOW='\[\033[1;35m\]'
-       RED='\[\033[38;2;255;100;100m\]'
-     GREEN='\[\033[38;2;100;255;100m\]'
-      BLUE='\[\033[38;2;100;100;255m\]'
-
-    PS1="${YELLOW}\t${RESET} ${RED}\u${RESET}@${BLUE}\h${RESET}:${GREEN}\w${RESET}\$ "
-    unset CHROOT RESET YELLOW RED BLUE GREEN
-else
-    PS1='\t \u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
+echo "PS1='$(emit_prompt color)'"
