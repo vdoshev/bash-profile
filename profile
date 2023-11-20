@@ -47,8 +47,8 @@ for feature in "$@"; do
   fi
 done
 
-cd ~ || return 2
-
 __end_time=$(date +%s%N)
 echo " ${BASH_PROFILE_FEATURES[*]} ($(( (__end_time - __start_time) / 1000000 )) ms)"
 unset __start_time __end_time
+
+cd ~ || return 2

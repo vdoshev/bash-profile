@@ -26,3 +26,11 @@ function docker_save() {
 function docker_load() {
   docker load < "$1"
 }
+
+function docker-push-to() {
+  local local_image=$1 target_remote=$2 target_image
+
+  target_image=${target_remote}/${local_image#*/}
+  docker tag "${local_image}" "${target_image}"
+  docker push "${target_image}"
+}

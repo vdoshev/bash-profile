@@ -4,6 +4,11 @@
 # Print ${PATH} in user friendly maner
 alias PATH='(echo "${PATH}" | tr ":" "\n")'
 
+alias 'cd..'='cd ..'
+alias 'cd...'='cd ../..'
+alias '..'='cd ..'
+alias '...'='cd ../..'
+alias '....'='cd ../../..'
 alias l='ls -lha'
 alias env='env | sort'
 alias cls=clear
@@ -36,6 +41,7 @@ if command -v cygpath &> /dev/null; then
   function nixpath() {
     cygpath "${1}" --absolute --unix   
   }
+
 elif [[ -n ${DRIVES_PATH} ]]; then
   # Convert Unix format paths to Windows path, with regular slashes.
   function winpath() {

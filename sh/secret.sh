@@ -36,32 +36,35 @@ function create_passphrase() {
 }
 
 # Can only return from a sourced script.
-[ "$_" != "$0" ] && return 0 2> /dev/null
+true && return 0 2> /dev/null
+
+function main() {
+  case "${1:-}" in
+    -d|--decode)
+      shift
+      if [ -z "${PASSPHRASE:-}" ]; then
+        read_passphrase PASSPHRASE
+      fi
+      SECRET=${1:?"Encrypted text or file"}
+      if [ -f "${SECRET}" ]; then
+        decode_secret "${PASSPHRASE}" < "${SECRET}"
+      else
+        decode_secret "${PASSPHRASE}" <<< "${SECRET}"
+      fi
+      ;;
+    *)
+      if [ -z "${PASSPHRASE:-}" ]; then
+        create_passphrase PASSPHRASE
+      fi
+      TEXT=${1:?"Plain text or file"}
+      if [ -f "${TEXT}" ]; then
+        encode_secret "${PASSPHRASE}" < "${TEXT}"
+      else
+        encode_secret "${PASSPHRASE}" <<< "${TEXT}"
+      fi
+      ;;
+  esac
+}
 
 set -eEuo pipefail
-
-case "${1:-}" in
-  -d|--decode)
-    shift
-    if [ -z "${PASSPHRASE:-}" ]; then
-      read_passphrase PASSPHRASE
-    fi
-    SECRET=${1:?"Encrypted text or file"}
-    if [ -f "${SECRET}" ]; then
-      decode_secret "${PASSPHRASE}" < "${SECRET}"
-    else
-      decode_secret "${PASSPHRASE}" <<< "${SECRET}"
-    fi
-    ;;
-  *)
-    if [ -z "${PASSPHRASE:-}" ]; then
-      create_passphrase PASSPHRASE
-    fi
-    TEXT=${1:?"Plain text or file"}
-    if [ -f "${TEXT}" ]; then
-      encode_secret "${PASSPHRASE}" < "${TEXT}"
-    else
-      encode_secret "${PASSPHRASE}" <<< "${TEXT}"
-    fi
-    ;;
-esac
+main "$@"
