@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
-# https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Controlling-the-Prompt
+#
+# eval $(sh/prompt.sh color)
 
+ 
+# https://www.shellhacks.com/bash-colors/
 declare -A FG_COLOR_CODES=(\
+  [_]=0
   [black]='0;30m'
   [red]='0;31'
   [green]='0;32'
@@ -21,6 +25,7 @@ declare -A FG_COLOR_CODES=(\
 )
 
 declare -A BG_COLOR_CODES=(\
+  [_]=0
   [black]='0;40m'
   [red]='0;41'
   [green]='0;42'
@@ -38,6 +43,26 @@ declare -A BG_COLOR_CODES=(\
   [white]='1;47'
 )
 
+# Emit ASCII escape sequences for echo and printf commands.
+# shellcheck disable=SC2028
+function emit() {
+  local keyword
+  for keyword in "$@"; do
+    case "${keyword}" in
+      fg?*)
+        echo -n '\e['"${FG_COLOR_CODES[${keyword:3}]}"'m'
+        ;;
+      bg?*)
+        echo -n '\e['"${BG_COLOR_CODES[${keyword:3}]}"'m'
+        ;;
+      *)
+        echo -n "${keyword}" 
+        ;;
+    esac
+  done
+}
+
+# https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Controlling-the-Prompt
 declare -A SPECIAL_CHARS=(\
   [space]=' '
   [time]='\t' # The time, in 24-hour HH:MM:SS format
@@ -47,21 +72,17 @@ declare -A SPECIAL_CHARS=(\
   [uid]='\$'  # For root user is '#', and '$' otherwise
 )
 
-# Emit ASCII escape sequences for specific keywords.
+# Emit ASCII escape sequences for prompt variables (PS1, etc.)
 # shellcheck disable=SC2028
-function emit() {
+function emit_ps() {
   local keyword chr
-  while test $# -gt 0; do
-    keyword=$1; shift
+  for keyword in "$@"; do
     case "${keyword}" in
       fg?*)
         echo -n '\[\033['"${FG_COLOR_CODES[${keyword:3}]}"'m\]'
         ;;
       bg?*)
         echo -n '\[\033['"${BG_COLOR_CODES[${keyword:3}]}"'m\]'
-        ;;
-      reset)
-        echo -n '\[\033[0m\]'
         ;;
       *)
         chr=${SPECIAL_CHARS[${keyword}]}
@@ -71,14 +92,13 @@ function emit() {
   done
 }
 
-# Emit prompt char sequence for PS1 variable
-# shellcheck disable=SC2034
+# Emit characters sequence for prompt variables (PS1, etc.)
 function emit_prompt() {
   case ${1:-} in
-    no-color) emit time space user @ host : pwd space uid space ;;
-    color|*) emit fg.purple time reset space fg.green user @ host reset : fg.light-blue pwd reset uid space ;;
+    no-color) emit_ps time space user @ host : pwd space uid space ;;
+    color|*)  emit_ps fg.purple time fg._ space fg.green user @ host fg._ : fg.light-blue pwd fg._ uid space ;;
   esac
 }
 
 true && return 0 2> /dev/null
-echo "PS1='$(emit_prompt "$1")'"
+echo "export PS1='$(emit_prompt "$1")'"
