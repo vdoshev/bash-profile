@@ -28,7 +28,7 @@ alias trim-empty='sed '\''/^$/d'\'''
 
 alias cd-bash='cd '"${BASH_PROFILE_DIR}"
 
-alias prompt='eval $('"${BASH_PROFILE_DIR}"'/sh/prompt.sh color)'
+alias prompt='eval "$('"${BASH_PROFILE_DIR}"'/sh/prompt.sh color)"'
 alias encode-secret="${BASH_PROFILE_DIR}"'/sh/secret.sh'
 alias decode-secret="${BASH_PROFILE_DIR}"'/sh/secret.sh -d'
 

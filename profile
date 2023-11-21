@@ -51,4 +51,5 @@ __end_time=$(date +%s%N)
 echo " ${BASH_PROFILE_FEATURES[*]} ($(( (__end_time - __start_time) / 1000000 )) ms)"
 unset __start_time __end_time
 
+prompt
 cd ~ || return 2

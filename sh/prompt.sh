@@ -3,7 +3,7 @@
 # Usage:
 #
 # Set a colorized prompt:
-#  $ eval $(sh/prompt.sh color)
+#  $ eval "$(sh/prompt.sh color)"
 #
 # Set a plain-text prompt (no colors):
 #  $ eval $(sh/prompt.sh no-color)
@@ -84,6 +84,7 @@ function emit_ps() {
   for keyword in "$@"; do
     case "${keyword}" in
       title) echo -n '\[\033]0;$BASH $PWD\007\]' ;;
+      git)   echo -n '`emit_git_branch`' ;;
       fg?*)  echo -n '\[\033['"${FG_COLOR_CODES[${keyword:3}]}"'m\]' ;;
       bg?*)  echo -n '\[\033['"${BG_COLOR_CODES[${keyword:3}]}"'m\]' ;;
       *)     echo -n "${SPECIAL_CHARS[${keyword}]:-${keyword}}" ;;
@@ -98,10 +99,34 @@ function emit_prompt() {
       emit_ps title time space user @ host : pwd nl uid space
       ;;
     1|color|*)
-      emit_ps title fg.purple time fg._ space fg.green user @ host fg._ : fg.light-blue pwd fg._ nl uid space
+      emit_ps title \
+          fg.purple time fg._ space \
+          fg.green user @ host fg._ : \
+          fg.light-blue pwd fg._ space \
+          fg.light-cyan git fg._ nl \
+          uid space
       ;;
   esac
 }
 
+function emit_git_branch() {
+  local dir branch
+  dir=$(builtin pwd)
+  while [[ "${#dir}" -gt 0 ]]; do
+    if [[ -f "${dir}"/.git/HEAD ]]; then
+      branch=$(cat "${dir}"/.git/HEAD)    # ref: refs/heads/feature/foo
+      branch=${branch##ref: refs/heads/}  # feature/foo
+      echo "(${branch})"
+      return 0
+    fi
+    dir=${dir%/*}
+  done
+}
+
 true && return 0 2> /dev/null
-echo "export PS1='$(emit_prompt "$1")'"
+
+declare -f emit_git_branch
+cat << EOD
+export -f emit_git_branch
+export PS1='$(emit_prompt "$1")'
+EOD
