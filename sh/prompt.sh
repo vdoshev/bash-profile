@@ -58,15 +58,10 @@ function emit() {
   local keyword
   for keyword in "$@"; do
     case "${keyword}" in
-      fg?*)
-        echo -n '\e['"${FG_COLOR_CODES[${keyword:3}]}"'m'
-        ;;
-      bg?*)
-        echo -n '\e['"${BG_COLOR_CODES[${keyword:3}]}"'m'
-        ;;
-      *)
-        echo -n "${keyword}" 
-        ;;
+      title) echo -n "\e]0;${BASH} ${PWD}\a" ;;
+      fg?*)  echo -n '\e['"${FG_COLOR_CODES[${keyword:3}]}"'m' ;;
+      bg?*)  echo -n '\e['"${BG_COLOR_CODES[${keyword:3}]}"'m' ;;
+      *)     echo -n "${keyword}" ;;
     esac
   done
 }
@@ -74,38 +69,37 @@ function emit() {
 # https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Controlling-the-Prompt
 declare -A SPECIAL_CHARS=(\
   [space]=' '
-  [time]='\t' # The time, in 24-hour HH:MM:SS format
-  [user]='\u' # The username of the current user
-  [host]='\h' # The hostname, up to the first ‘.’
-  [pwd]='\w'  # The value of the PWD shell variable
-  [uid]='\$'  # For root user is '#', and '$' otherwise
+  [nl]='\n'   # new line
+  [time]='\t' # the time, in 24-hour HH:MM:SS format
+  [user]='\u' # the username of the current user
+  [host]='\h' # the hostname, up to the first ‘.’
+  [pwd]='\w'  # the value of the PWD shell variable
+  [uid]='\$'  # for root user is '#', and '$' otherwise
 )
 
 # Emit ASCII escape sequences for prompt variables (PS1, etc.)
-# shellcheck disable=SC2028
+# shellcheck disable=SC2028,SC2016
 function emit_ps() {
-  local keyword chr
+  local keyword
   for keyword in "$@"; do
     case "${keyword}" in
-      fg?*)
-        echo -n '\[\033['"${FG_COLOR_CODES[${keyword:3}]}"'m\]'
-        ;;
-      bg?*)
-        echo -n '\[\033['"${BG_COLOR_CODES[${keyword:3}]}"'m\]'
-        ;;
-      *)
-        chr=${SPECIAL_CHARS[${keyword}]}
-        echo -n "${chr:-${keyword}}" 
-        ;;
+      title) echo -n '\[\033]0;$BASH $PWD\007\]' ;;
+      fg?*)  echo -n '\[\033['"${FG_COLOR_CODES[${keyword:3}]}"'m\]' ;;
+      bg?*)  echo -n '\[\033['"${BG_COLOR_CODES[${keyword:3}]}"'m\]' ;;
+      *)     echo -n "${SPECIAL_CHARS[${keyword}]:-${keyword}}" ;;
     esac
   done
 }
 
 # Emit characters sequence for prompt variables (PS1, etc.)
 function emit_prompt() {
-  case ${1:-} in
-    no-color) emit_ps           time      space          user @ host      :               pwd      uid space ;;
-    color|*)  emit_ps fg.purple time fg._ space fg.green user @ host fg._ : fg.light-blue pwd fg._ uid space ;;
+  case ${1:-1} in
+    0|no-color)
+      emit_ps title time space user @ host : pwd nl uid space
+      ;;
+    1|color|*)
+      emit_ps title fg.purple time fg._ space fg.green user @ host fg._ : fg.light-blue pwd fg._ nl uid space
+      ;;
   esac
 }
 
