@@ -39,28 +39,30 @@ function create_passphrase() {
 true && return 0 2> /dev/null
 
 function main() {
+  local passphrase=${PASSPHRASE:-} secret text
+
   case "${1:-}" in
     -d|--decode)
       shift
-      if [ -z "${PASSPHRASE:-}" ]; then
-        read_passphrase PASSPHRASE
+      if [ -z "${passphrase:-}" ]; then
+        read_passphrase passphrase
       fi
-      SECRET=${1:?"Encrypted text or file"}
-      if [ -f "${SECRET}" ]; then
-        decode_secret "${PASSPHRASE}" < "${SECRET}"
+      secret=${1:?"Encrypted text or file"}
+      if [ -f "${secret}" ]; then
+        decode_secret "${passphrase}" < "${secret}"
       else
-        decode_secret "${PASSPHRASE}" <<< "${SECRET}"
+        decode_secret "${passphrase}" <<< "${secret}"
       fi
       ;;
     *)
-      if [ -z "${PASSPHRASE:-}" ]; then
-        create_passphrase PASSPHRASE
+      if [ -z "${passphrase:-}" ]; then
+        create_passphrase passphrase
       fi
-      TEXT=${1:?"Plain text or file"}
-      if [ -f "${TEXT}" ]; then
-        encode_secret "${PASSPHRASE}" < "${TEXT}"
+      text=${1:?"Plain text or file"}
+      if [ -f "${text}" ]; then
+        encode_secret "${passphrase}" < "${text}"
       else
-        encode_secret "${PASSPHRASE}" <<< "${TEXT}"
+        encode_secret "${passphrase}" <<< "${text}"
       fi
       ;;
   esac
