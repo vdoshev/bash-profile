@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
 #
-# eval $(sh/prompt.sh color)
-
+# Usage:
+#
+# Set a colorized prompt:
+#  $ eval $(sh/prompt.sh color)
+#
+# Set a plain-text prompt (no colors):
+#  $ eval $(sh/prompt.sh no-color)
+#
+# Print colorized text:
+#  $ source sh/prompt.sh
+#  $ echo -e "$(emit fg.red 'Hello red color!' fg._ ' No more red text.')"
  
 # https://www.shellhacks.com/bash-colors/
 declare -A FG_COLOR_CODES=(\
@@ -95,7 +104,7 @@ function emit_ps() {
 # Emit characters sequence for prompt variables (PS1, etc.)
 function emit_prompt() {
   case ${1:-} in
-    no-color) emit_ps time space user @ host : pwd space uid space ;;
+    no-color) emit_ps           time      space          user @ host      :               pwd      uid space ;;
     color|*)  emit_ps fg.purple time fg._ space fg.green user @ host fg._ : fg.light-blue pwd fg._ uid space ;;
   esac
 }
