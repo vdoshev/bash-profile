@@ -3,14 +3,19 @@
 # Usage:
 #
 # Set a colorized prompt:
-#  $ eval "$(sh/prompt.sh color)"
+#  eval "$(sh/prompt.sh)"
 #
 # Set a plain-text prompt (no colors):
-#  $ eval $(sh/prompt.sh no-color)
+#  eval "$(sh/prompt.sh no-color)"
 #
-# Print colorized text:
-#  $ source sh/prompt.sh
-#  $ echo -e "$(emit fg.red 'Hello red color!' fg._ ' No more red text.')"
+# Print a colorized text:
+#  . sh/prompt.sh
+#  echo_e fg.red 'Hello red color!' fg._ ' No more red text.'
+#
+# Emit a colorized text:
+#  . sh/prompt.sh
+#  echo -e "Just a word in $(emit fg.red 'red' fg._) color."
+#  printf "Yet another in $(emit fg.yellow 'yellow' fg._) color.\n"
  
 # https://www.shellhacks.com/bash-colors/
 # shellcheck disable=SC2034 # appears unused
@@ -42,6 +47,10 @@ function emit() {
       *)     echo -n "${keyword}" ;;
     esac
   done
+}
+
+function echo_e() {
+  echo -e "$(emit "$@")"
 }
 
 # https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Controlling-the-Prompt
