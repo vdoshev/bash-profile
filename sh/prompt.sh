@@ -13,43 +13,21 @@
 #  $ echo -e "$(emit fg.red 'Hello red color!' fg._ ' No more red text.')"
  
 # https://www.shellhacks.com/bash-colors/
-declare -A FG_COLOR_CODES=(\
-  [_]=0
-  [black]='0;30m'
-  [red]='0;31'
-  [green]='0;32'
-  [brown]='0;33'
-  [blue]='0;34'
-  [purple]='0;35'
-  [cyan]='0;36'
-  [light-gray]='0;37'
-  [dark-gray]='1;30'
-  [light-red]='1;31'
-  [light-green]='1;32'
-  [yellow]='1;33'
-  [light-blue]='1;34'
-  [light-purple]='1;35'
-  [light-cyan]='1;36'
-  [white]='1;37'
+# shellcheck disable=SC2034 # appears unused
+declare -A CH_STYLES=([normal]=0 [bold]=1 [underlined]=4 [blinking]=5 [reverse]=7)
+
+declare -A FG_COLOR_CODES=([_]=0
+  [black]='0;30m' [red]='0;31' [green]='0;32' [brown]='0;33'
+  [blue]='0;34' [purple]='0;35' [cyan]='0;36' [light-gray]='0;37'
+  [dark-gray]='1;30' [light-red]='1;31' [light-green]='1;32' [yellow]='1;33'
+  [light-blue]='1;34' [light-purple]='1;35' [light-cyan]='1;36' [white]='1;37'
 )
 
-declare -A BG_COLOR_CODES=(\
-  [_]=0
-  [black]='0;40m'
-  [red]='0;41'
-  [green]='0;42'
-  [brown]='0;43'
-  [blue]='0;44'
-  [purple]='0;45'
-  [cyan]='0;46'
-  [light-gray]='0;47'
-  [light-red]='1;41'
-  [light-green]='1;42'
-  [yellow]='1;43'
-  [light-blue]='1;44'
-  [light-purple]='1;45'
-  [light-cyan]='1;46'
-  [white]='1;47'
+declare -A BG_COLOR_CODES=([_]=0
+  [black]='0;40m' [red]='0;41' [green]='0;42' [brown]='0;43'
+  [blue]='0;44' [purple]='0;45' [cyan]='0;46' [light-gray]='0;47'
+  [dark-gray]='1;40' [light-red]='1;41' [light-green]='1;42' [yellow]='1;43'
+  [light-blue]='1;44' [light-purple]='1;45' [light-cyan]='1;46' [white]='1;47'
 )
 
 # Emit ASCII escape sequences for echo and printf commands.
@@ -84,7 +62,7 @@ function emit_ps() {
   for keyword in "$@"; do
     case "${keyword}" in
       title) echo -n '\[\033]0;$BASH $PWD\007\]' ;;
-      git)   echo -n '`emit_git_branch`' ;;
+      git)   echo -n '`emit_git_info`' ;;
       fg?*)  echo -n '\[\033['"${FG_COLOR_CODES[${keyword:3}]}"'m\]' ;;
       bg?*)  echo -n '\[\033['"${BG_COLOR_CODES[${keyword:3}]}"'m\]' ;;
       *)     echo -n "${SPECIAL_CHARS[${keyword}]:-${keyword}}" ;;
@@ -109,14 +87,13 @@ function emit_prompt() {
   esac
 }
 
-function emit_git_branch() {
-  local dir branch
+function emit_git_info() {
+  local dir ref
   dir=$(builtin pwd)
   while [[ "${#dir}" -gt 0 ]]; do
     if [[ -f "${dir}"/.git/HEAD ]]; then
-      branch=$(cat "${dir}"/.git/HEAD)    # ref: refs/heads/feature/foo
-      branch=${branch##ref: refs/heads/}  # feature/foo
-      echo "(${branch})"
+      ref=$(< "${dir}"/.git/HEAD)
+      echo "(${ref##ref: refs/heads/})"
       return 0
     fi
     dir=${dir%/*}
@@ -125,8 +102,9 @@ function emit_git_branch() {
 
 true && return 0 2> /dev/null
 
-declare -f emit_git_branch
+declare -f emit_git_info
 cat << EOD
-export -f emit_git_branch
+export -f emit_git_info
+OLD_PS1=\$PS1
 export PS1='$(emit_prompt "$1")'
 EOD
