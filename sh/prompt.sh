@@ -10,12 +10,12 @@
 #
 # Print a colorized text:
 #  . sh/prompt.sh
-#  echo_e fg.red 'Hello red color!' fg._ ' No more red text.'
+#  echo_e fg.red Red fg. ' color'
+#  echo_e fg.FF0000 RR fg.00FF00 GG fg.0000FF BB fg. ' color'
 #
-# Emit a colorized text:
+# Embed a colorized text:
 #  . sh/prompt.sh
-#  echo -e "Just a word in $(emit fg.red 'red' fg._) color."
-#  printf "Yet another in $(emit fg.yellow 'yellow' fg._) color.\n"
+#  echo -e "Plain text with $(emit fg.yellow yellow fg.) fragment"
  
 # https://www.shellhacks.com/bash-colors/
 # shellcheck disable=SC2034 # appears unused
@@ -35,15 +35,32 @@ declare -A BG_COLOR_CODES=([_]=0
   [light-blue]='1;44' [light-purple]='1;45' [light-cyan]='1;46' [white]='1;47'
 )
 
+# A0B0C0 -> 160;176;192
+function rgb_hex2dec() {
+  echo "$((16#${1:0:2}));$((16#${1:2:2}));$((16#${1:4:2}))"
+}
+
+# FF0000 -> 38;2;255;0;0
+# red    -> 0;31
+function emit_fgcolor() {
+  echo "${FG_COLOR_CODES[${1:-_}]:-"38;2;$(rgb_hex2dec "$1")"}"
+}
+
+# 0000FF -> 48;2;0;0;255
+# blue   -> 0;34
+function emit_bgcolor() {
+  echo "${BG_COLOR_CODES[${1:-_}]:-"48;2;$(rgb_hex2dec "$1")"}"
+}
+
 # Emit ASCII escape sequences for echo and printf commands.
-# shellcheck disable=SC2028
+# shellcheck disable=SC2028 # echo won't expand escape sequences
 function emit() {
   local keyword
   for keyword in "$@"; do
     case "${keyword}" in
       title) echo -n "\e]0;${BASH} ${PWD}\a" ;;
-      fg?*)  echo -n '\e['"${FG_COLOR_CODES[${keyword:3}]}"'m' ;;
-      bg?*)  echo -n '\e['"${BG_COLOR_CODES[${keyword:3}]}"'m' ;;
+      fg.*)  echo -n "\e[$(emit_fgcolor "${keyword:3}")m" ;;
+      bg.*)  echo -n "\e[$(emit_bgcolor "${keyword:3}")m" ;;
       *)     echo -n "${keyword}" ;;
     esac
   done
@@ -65,15 +82,16 @@ declare -A SPECIAL_CHARS=(\
 )
 
 # Emit ASCII escape sequences for prompt variables (PS1, etc.)
-# shellcheck disable=SC2028,SC2016
+# shellcheck disable=SC2028 # echo won't expand escape sequences
+# shellcheck disable=SC2016 # expressions don't expand in single quotes
 function emit_ps() {
   local keyword
   for keyword in "$@"; do
     case "${keyword}" in
       title) echo -n '\[\033]0;$BASH $PWD\007\]' ;;
       git)   echo -n '`emit_git_info`' ;;
-      fg?*)  echo -n '\[\033['"${FG_COLOR_CODES[${keyword:3}]}"'m\]' ;;
-      bg?*)  echo -n '\[\033['"${BG_COLOR_CODES[${keyword:3}]}"'m\]' ;;
+      fg.*)  echo -n '\[\033['"$(emit_fgcolor "${keyword:3}")"'m\]' ;;
+      bg.*)  echo -n '\[\033['"$(emit_bgcolor "${keyword:3}")"'m\]' ;;
       *)     echo -n "${SPECIAL_CHARS[${keyword}]:-${keyword}}" ;;
     esac
   done
@@ -87,10 +105,10 @@ function emit_prompt() {
       ;;
     1|color|*)
       emit_ps title \
-          fg.purple time fg._ space \
-          fg.green user @ host fg._ : \
-          fg.light-blue pwd fg._ space \
-          fg.light-cyan git fg._ nl \
+          fg.purple time fg. space \
+          fg.green user @ host fg. : \
+          fg.light-blue pwd fg. space \
+          fg.light-cyan git fg. nl \
           uid space
       ;;
   esac
