@@ -4,6 +4,7 @@
 # Print ${PATH} in user friendly maner
 alias PATH='(echo "${PATH}" | tr ":" "\n")'
 
+alias cd-bash='cd '"${BASH_PROFILE_DIR}"
 alias 'cd..'='cd ..'
 alias 'cd...'='cd ../..'
 alias '..'='cd ..'
@@ -25,8 +26,6 @@ alias trim-space='sed -e '\''s/^[ \t]*//; s/[ \t]*$//;'\'''
 alias trim-nl='tr -d '\''\n'\'''
 alias trim-comments='sed '\''/^#.*$/d'\'''
 alias trim-empty='sed '\''/^$/d'\'''
-
-alias cd-bash='cd '"${BASH_PROFILE_DIR}"
 
 alias encode-secret="${BASH_PROFILE_DIR}"'/sh/secret.sh'
 alias decode-secret="${BASH_PROFILE_DIR}"'/sh/secret.sh -d'
