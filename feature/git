@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 alias gs='git status'
 
-alias git-commit='git commit -m "Message $(head -1 <(fold -w 20  <(tr -dc "a-zA-Z0-9" < /dev/urandom)))"'
-alias git-add-commit='git add . && git-commit'
 alias git-amend='git add . && git commit --amend'
 alias git-amend-push='git-amend && git push -f'
+alias git-commit='git commit -am "Message $(head -1 <(fold -w 20  <(tr -dc "a-zA-Z0-9" < /dev/urandom)))"'
+alias git-commit-push='git-commit; git push'
 
 # Pull from multiple git remote repositories (can also be nested).
 function git_pull() {
