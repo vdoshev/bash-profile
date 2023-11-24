@@ -34,6 +34,10 @@ function prompt() {
   eval "$("${BASH_PROFILE_DIR}"/sh/prompt.sh "$@")"
 }
 
+function new_sh() {
+  [[ -n ${1} ]] && [[ ! -f ${1} ]] && echo '#!/usr/bin/env bash' > "${1}"
+}
+
 if command -v cygpath &> /dev/null; then
   # Convert Unix format paths to Windows path, with regular slashes.
   function winpath() {
