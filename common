@@ -35,7 +35,7 @@ function prompt() {
 }
 
 function new_sh() {
-  [[ -n ${1} ]] && [[ ! -f ${1} ]] && echo '#!/usr/bin/env bash' > "${1}"
+  [[ ! -e ${1:?filename} ]] && echo '#!/usr/bin/env bash' > "${1}"
 }
 
 if command -v cygpath &> /dev/null; then
