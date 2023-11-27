@@ -3,7 +3,8 @@ alias gs='git status'
 
 alias git-amend='git add . && git commit --amend'
 alias git-amend-push='git-amend && git push -f'
-alias git-commit='git commit -am "Message $(head -1 <(fold -w 20  <(tr -dc "a-zA-Z0-9" < /dev/urandom)))"'
+alias git-message='echo "Changes in $(git rev-parse --abbrev-ref HEAD) on $(date +%Y-%m-%d) at $(date +%H:%M:%S)"'
+alias git-commit='git commit -am "$(git-message)"'
 alias git-commit-push='git-commit; git push'
 
 # Pull from multiple git remote repositories (can also be nested).
