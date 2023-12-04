@@ -18,8 +18,17 @@ alias cls=clear
 alias declared='declare -p | grep '
 
 # Find all files except the contents of system folders
-alias find-f="find . -type f -not -path './.*/*' | sort"
-alias find-tree="find . -not -path './.*/*' | sort | sed 's/[^/]*\//|  /g; ;s/| *\([^| ]\)/+-- \1/'"
+function find_f() {
+  find "${1:-.}" -type f -not -path './.*/*' | sort
+}
+alias find-f=find_f
+
+# Show a tree-like layout of files except from the contents of system folders
+function find_tree() {
+  find "${1:-.}" -not -path './.*/*' | sort \
+    | sed 's/[^/]*\//|  /g; ;s/| *\([^| ]\)/+-- \1/'
+}
+alias find-tree=find_tree
 
 # Trim spaces, new lines, comments, empty lines, etc.
 alias trim-space='sed -e '\''s/^[ \t]*//; s/[ \t]*$//;'\'''
