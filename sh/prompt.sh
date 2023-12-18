@@ -101,10 +101,10 @@ function emit_ps() {
 function emit_prompt() {
   case ${1:-1} in
     0|no-color)
-      emit_ps title time space user @ host : pwd nl uid space
+      emit_ps title nl time space user @ host : pwd nl uid space
       ;;
     1|color|*)
-      emit_ps title \
+      emit_ps title nl \
           fg.purple time fg. space \
           fg.green user @ host fg. : \
           fg.light-blue pwd fg. space \
