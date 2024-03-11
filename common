@@ -151,5 +151,6 @@ function jar_info() {
     unzip -q "${jar}" -d "${dir}" META-INF/MANIFEST.MF
     mv "${dir}/META-INF/MANIFEST.MF" "${jar}-info"
     rm -rf "${dir}"
+    cat "${jar}-info"
   done
 }
