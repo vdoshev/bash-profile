@@ -25,7 +25,8 @@ alias find-f=find_f
 
 # Show a tree-like layout of files except from the contents of system folders
 function find_tree() {
-  find "${1:-.}" -not -path './.*/*' | sort \
+  find "${1:-.}" -not -path './.*/*'\
+    | sort\
     | sed 's/[^/]*\//|  /g; ;s/| *\([^| ]\)/+-- \1/'
 }
 alias find-tree=find_tree
