@@ -99,13 +99,26 @@ function mkcd() {
 
 # Go to the first directory where the command executable is found
 function cdto() {
-  local cmd=${1:?command}
-  local -a paths
-  IFS='' read -r -a paths < <(which "${cmd}" 2> /dev/null)
-  if [[ ${#paths[@]} -gt 0 ]]; then
-    cd "$(dirname "${paths[0]}")" || return 2
+  local cmd=${1:?target}
+
+  if [[ -d "${cmd}" ]]; then
+    cd "${cmd}" || return 2
     return 0
   fi
+
+  if [[ -f "${cmd}" ]]; then
+    cd "$(dirname "${cmd}")" || return 3
+    return 0
+  fi
+
+  local -a paths
+  IFS='' read -r -a paths < <(which "${cmd}" 2> /dev/null)
+
+  if [[ ${#paths[@]} -gt 0 ]]; then
+    cd "$(dirname "${paths[0]}")" || return 4
+    return 0
+  fi
+
   return 1
 }
 
