@@ -6,6 +6,8 @@ alias git-amend-push='git-amend && git push -f'
 alias git-message='echo "Changes in $(git rev-parse --abbrev-ref HEAD) on $(date +%Y-%m-%d) at $(date +%H:%M:%S)"'
 alias git-commit='git commit -am "$(git-message)"'
 alias git-commit-push='git-commit; git push'
+alias git-nossl='git config --global http.sslVerify false'
+alias git-ssl='git config --global http.sslVerify true'
 
 # Pull from multiple git remote repositories (can also be nested).
 function git_pull() {
