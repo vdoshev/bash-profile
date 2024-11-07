@@ -37,6 +37,7 @@ alias trim-nl='tr -d '\''\n'\'''
 alias trim-comments='sed '\''/^#.*$/d'\'''
 alias trim-empty='sed '\''/^$/d'\'''
 alias trim-noi18n='sed '\''s~[[:space:]]*//[[:space:]]*NOI18N[[:space:]]*~~g'\'''
+alias trim-colors='sed '\''s|\x1B\[[0-9;]*[a-zA-Z]||g'\'''
 
 alias encode-secret="${BASH_PROFILE_DIR}"'/sh/secret.sh'
 alias decode-secret="${BASH_PROFILE_DIR}"'/sh/secret.sh -d'
