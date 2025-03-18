@@ -33,3 +33,20 @@ function docker_push_to() {
   docker tag "${image}" "${remote_image}"
   docker push "${remote_image}"
 }
+
+# Remove all but the latest image for each repository
+function docker_reduce() {
+  local repo id
+
+  if [[ $# -eq 0 ]]; then
+    # shellcheck disable=SC2046
+    set -- $(\docker images --format="{{.Repository}}" | sort | uniq)
+  fi
+
+  for repo in "$@"; do
+    for id in $(\docker images --format="{{.CreatedAt}}|{{.ID}}" --filter="reference=${repo}" | sort -r | cut -d'|' -f2 | tail -n +2); do
+      \docker rmi "${id}"
+    done
+  done
+}
+alias d-reduce=docker_reduce
