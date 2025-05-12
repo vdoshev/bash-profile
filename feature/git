@@ -8,6 +8,7 @@ alias git-commit='git commit -am "$(git-message)"'
 alias git-commit-push='git-commit; git push'
 alias git-nossl='git config --global http.sslVerify false'
 alias git-ssl='git config --global http.sslVerify true'
+alias git-unset-password='git config --global --unset user.password'
 
 # Pull from multiple git remote repositories (can also be nested).
 function git_pull() {
