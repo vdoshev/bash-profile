@@ -46,8 +46,22 @@ function prompt() {
   eval "$("${BASH_PROFILE_DIR}"/sh/prompt.sh "$@")"
 }
 
-function new_sh() {
-  [[ ! -e ${1:?filename} ]] && echo '#!/usr/bin/env bash' > "${1}"
+#! interpreter [optional-one-arg-only]
+function shebang() {
+  echo "#!/usr/bin/env ${1:-bash}"
+}
+
+function new() {
+  local script=${1:?filename}
+  local interpreter=${2:-bash}
+
+  if [[ -e "${script}" ]]; then
+    echo "File already exists." 1>&2
+    return 1
+  fi
+
+  shebang "${interpreter}" | tee "${script}"
+  chmod +x "${script}"
 }
 
 if command -v cygpath &> /dev/null; then
