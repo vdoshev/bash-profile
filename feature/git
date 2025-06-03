@@ -29,3 +29,16 @@ function git_pull() {
   done
 }
 alias git-pull=git_pull
+
+# Redo all changes from the current branch to a new branch based on another branch.
+function git_redo() {
+  local new_branch=${1:?new branch} new_from=${2:-develop} origin=${3:-origin}
+  local current_branch
+  current_branch=$(git rev-parse --abbrev-ref HEAD)
+  git checkout "${new_from}" || return 1
+  git pull --tags --force "${origin}" "${new_from}" || return 1
+  git checkout -b "${new_branch}" || return 1
+  git merge --squash --no-commit "${current_branch}" || return 1
+  git status
+}
+alias git-redo=git_redo
