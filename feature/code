@@ -4,3 +4,4 @@
 alias c.='code .'
 alias code.='code .'
 alias code-bash='code '"${BASH_PROFILE_DIR}"
+alias code-settings='cat '"${USER_HOME}"'/AppData/Roaming/Code/User/settings.json'
