@@ -51,3 +51,7 @@ function docker_reduce() {
   done
 }
 alias d-reduce=docker_reduce
+
+function d-volume-ls() {
+  \docker run -it --rm -v "${1:?volume}:/vol" busybox ls -l //vol
+}
